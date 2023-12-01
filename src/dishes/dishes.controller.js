@@ -7,17 +7,17 @@ const {
 } = require("./dishes.middleware");
 const nextId = require("../utils/nextId");
 
-const update = (req, res) => {
+function update(req, res) {
   const { dish, reqBody } = res.locals;
-  Object.getOwnPropertyNames(dish).forEach((prop) => {
+  Object.getOwnPropertyNames(dish).forEach(function (prop) {
     if (dish[prop] !== reqBody[prop]) {
       dish[prop] = reqBody[prop];
     }
   });
   res.json({ data: dish });
-};
+}
 
-const create = (req, res) => {
+function create(req, res) {
   const { reqBody } = res.locals;
   const newDish = {
     ...reqBody,
@@ -25,15 +25,15 @@ const create = (req, res) => {
   };
   dishes.push(newDish);
   res.status(201).json({ data: newDish });
-};
+}
 
-const read = (req, res) => {
+function read(req, res) {
   res.json({ data: res.locals.dish });
-};
+}
 
-const list = (req, res) => {
+function list(req, res) {
   res.json({ data: dishes });
-};
+}
 
 module.exports = {
   create: [bodyValidator, create],

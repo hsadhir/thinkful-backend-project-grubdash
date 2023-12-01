@@ -1,13 +1,15 @@
 const path = require("path");
 const orders = require(path.resolve("src/data/orders-data"));
 
-const validateDeliverTo = (deliverTo) =>
-  deliverTo ? null : "Order must include a deliverTo property.";
+function validateDeliverTo(deliverTo) {
+  return deliverTo ? null : "Order must include a deliverTo property.";
+}
 
-const validateMobileNumber = (mobileNumber) =>
-  mobileNumber ? null : "Order must include a mobileNumber property.";
+function validateMobileNumber(mobileNumber) {
+  return mobileNumber ? null : "Order must include a mobileNumber property.";
+}
 
-const bodyValidator = (req, res, next) => {
+function bodyValidator(req, res, next) {
   const { data = {} } = req.body;
 
   const deliverToError = validateDeliverTo(data.deliverTo);
@@ -24,18 +26,14 @@ const bodyValidator = (req, res, next) => {
     res.locals.reqBody = data;
     return next();
   }
-};
+}
 
-const validateDishes = (req, res, next) => {
+function validateDishes(req, res, next) {
   const {
     locals: { reqBody },
   } = res;
 
-  if (
-    !reqBody.dishes ||
-    !reqBody.dishes.length ||
-    !Array.isArray(reqBody.dishes)
-  ) {
+  if (!reqBody.dishes || !reqBody.dishes.length || !Array.isArray(reqBody.dishes)) {
     next({
       status: 400,
       message: "Order must include at least one dish.",
@@ -43,9 +41,9 @@ const validateDishes = (req, res, next) => {
   }
 
   return next();
-};
+}
 
-const validateDishQuantity = (req, res, next) => {
+function validateDishQuantity(req, res, next) {
   const {
     reqBody: { dishes },
   } = res.locals;
@@ -69,9 +67,9 @@ const validateDishQuantity = (req, res, next) => {
       Array.isArray(invalidDishIndex) ? "es" : ""
     } ${dishIdx} must have a quantity that is an integer greater than 0.`,
   });
-};
+}
 
-const orderExists = (req, res, next) => {
+function orderExists(req, res, next) {
   const {
     params: { orderId },
   } = req;
@@ -89,7 +87,7 @@ const orderExists = (req, res, next) => {
   });
 }
 
-const bodyIdMatchesRouteId = (req, res, next) => {
+function bodyIdMatchesRouteId(req, res, next) {
   const {
     locals: {
       orderId,
@@ -107,9 +105,9 @@ const bodyIdMatchesRouteId = (req, res, next) => {
   }
 
   return next();
-};
+}
 
-const bodyHasStatusProperty = (req, res, next) => {
+function bodyHasStatusProperty(req, res, next) {
   const {
     locals: { reqBody },
   } = res;
@@ -130,9 +128,9 @@ const bodyHasStatusProperty = (req, res, next) => {
   }
 
   return next();
-};
+}
 
-const orderStatusIsPending = (req, res, next) => {
+function orderStatusIsPending(req, res, next) {
   const {
     locals: { order },
   } = res;
@@ -145,7 +143,7 @@ const orderStatusIsPending = (req, res, next) => {
   }
 
   return next();
-};
+}
 
 module.exports = {
   orderStatusIsPending,

@@ -4,16 +4,16 @@ const middleware = require("./orders.middleware");
 const nextId = require("../utils/nextId");
 
 // ============= GET(s) ====================
-const list = (req, res) => {
+function list(req, res) {
   res.json({ data: orders });
-};
+}
 
-const read = (req, res) => {
+function read(req, res) {
   res.json({ data: res.locals.order });
-};
+}
 
 // =========== POST =========================
-const create = (req, res) => {
+function create(req, res) {
   const {
     locals: { reqBody },
   } = res;
@@ -23,10 +23,10 @@ const create = (req, res) => {
   };
   orders.push(newOrder);
   res.status(201).json({ data: newOrder });
-};
+}
 
 // =============== PUT ======================
-const update = (req, res) => {
+function update(req, res) {
   const {
     locals: { reqBody, order },
   } = res;
@@ -36,15 +36,15 @@ const update = (req, res) => {
     }
   });
   res.json({ data: order });
-};
+}
 
 // ============= DELETE ===========
-const destroy = (req, res) => {
+function destroy(req, res) {
   const { locals: { orderId } } = res;
   const orderIndex = orders.findIndex((order) => order.id === orderId);
   orders.splice(orderIndex, 1);
   res.sendStatus(204);
-};
+}
 
 module.exports = {
   create: [

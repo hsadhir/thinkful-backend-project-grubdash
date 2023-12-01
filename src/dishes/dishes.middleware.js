@@ -1,12 +1,19 @@
 const path = require("path");
 const dishes = require(path.resolve("src/data/dishes-data"));
 
-const validateName = (name) => (name ? null : "Dish must include a name.");
-const validateDescription = (description) =>
-  description ? null : "Dish must include a description.";
-const validateImageUrl = (imageUrl) =>
-  imageUrl ? null : "Dish must include an image_url.";
-const validatePrice = (price) => {
+function validateName(name) {
+  return name ? null : "Dish must include a name.";
+}
+
+function validateDescription(description) {
+  return description ? null : "Dish must include a description.";
+}
+
+function validateImageUrl(imageUrl) {
+  return imageUrl ? null : "Dish must include an image_url.";
+}
+
+function validatePrice(price) {
   if (price === undefined) {
     return "Dish must include a price.";
   }
@@ -14,9 +21,9 @@ const validatePrice = (price) => {
     return "Dish must include a price, and it must be an integer greater than 0.";
   }
   return null;
-};
+}
 
-const bodyValidator = (req, res, next) => {
+function bodyValidator(req, res, next) {
   const { data = {} } = req.body;
 
   const nameError = validateName(data.name);
@@ -36,10 +43,10 @@ const bodyValidator = (req, res, next) => {
     res.locals.reqBody = data;
     return next();
   }
-};
+}
 
 // Validation Function for Read and Update functions:
-const dishExists = (req, res, next) => {
+function dishExists(req, res, next) {
   const { dishId } = req.params;
   const foundDish = dishes.find((dish) => dish.id === dishId);
 
@@ -52,10 +59,10 @@ const dishExists = (req, res, next) => {
     status: 404,
     message: `Dish does not exist: ${dishId}.`,
   });
-};
+}
 
 // Validation Function for the Update function:
-const bodyIdMatchesRouteId = (req, res, next) => {
+function bodyIdMatchesRouteId(req, res, next) {
   const {
     dishId,
     reqBody: { id },
@@ -71,7 +78,7 @@ const bodyIdMatchesRouteId = (req, res, next) => {
     });
   }
   return next();
-};
+}
 
 module.exports = {
   bodyValidator,
